@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smiski Pomodoro Timer</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F3F5E3;
+    --light-green: #DDE3BA;
+    --mid-green: #B6C77B;
+    --green: #92AA58;
+    --dark-green: #6B7F3A;
+    --darkest-green: #455826;
+    --shadow: rgba(69, 88, 38, 0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--light-green) 1px, transparent 1px),
+      linear-gradient(90deg, var(--light-green) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.4;
+    z-index: 0;
+  }
+  .sparkle {
+    position: fixed; pointer-events: none; z-index: 1;
+    font-size: 18px; animation: floatSpark 6s ease-in-out infinite; opacity: 0.5;
+  }
+  .sparkle:nth-child(1) { top: 8%; left: 12%; animation-delay: 0s; }
+  .sparkle:nth-child(2) { top: 15%; right: 10%; animation-delay: 1.5s; }
+  .sparkle:nth-child(3) { bottom: 20%; left: 8%; animation-delay: 3s; }
+  .sparkle:nth-child(4) { bottom: 12%; right: 15%; animation-delay: 4.5s; }
+  .sparkle:nth-child(5) { top: 45%; left: 5%; animation-delay: 2s; }
+  .sparkle:nth-child(6) { top: 35%; right: 6%; animation-delay: 0.8s; }
+  @keyframes floatSpark {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
+    50% { transform: translateY(-14px) rotate(20deg); opacity: 0.8; }
+  }
+  .timer-card {
+    position: relative; z-index: 2;
+    background: white;
+    border: 3px solid var(--dark-green);
+    border-radius: 24px;
+    padding: 36px 40px 32px;
+    width: 340px;
+    text-align: center;
+    box-shadow: 6px 6px 0px var(--darkest-green), 0 20px 60px var(--shadow);
+    transition: all 0.4s ease;
+  }
+  .window-bar {
+    background: var(--dark-green); border-radius: 12px 12px 0 0;
+    margin: -36px -40px 24px -40px; padding: 10px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .window-title { color: var(--cream); font-family: 'Fredoka One', sans-serif; font-size: 14px; letter-spacing: 0.5px; }
+  .window-btns { display: flex; gap: 6px; }
+  .window-btns span { width: 12px; height: 12px; border-radius: 50%; background: var(--mid-green); border: 1.5px solid var(--darkest-green); display: inline-block; }
+  .mode-label {
+    font-family: 'Fredoka One', sans-serif; font-size: 20px;
+    color: var(--darkest-green); margin-bottom: 14px; letter-spacing: 0.5px; transition: all 0.4s ease;
+  }
+  .progress-ring-wrap {
+    position: relative; width: 210px; height: 210px; margin: 0 auto 6px;
+  }
+  .progress-ring-wrap svg { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--light-green); stroke-width: 6; }
+  .ring-progress {
+    fill: none; stroke: var(--dark-green); stroke-width: 6; stroke-linecap: round;
+    transition: stroke-dashoffset 1s linear, stroke 0.4s ease;
+  }
+  .smiski-wrap {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 148px; height: 148px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .smiski-img {
+    width: 100%; height: 100%; object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(107,127,58,0.2));
+    transition: opacity 0.4s ease;
+  }
+  .work-mode .smiski-img { animation: workBob 2.8s ease-in-out infinite; }
+  @keyframes workBob {
+    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+    50% { transform: translateY(-7px) rotate(1.5deg); }
+  }
+  .break-mode .smiski-img { animation: sleepBreath 3.5s ease-in-out infinite; }
+  @keyframes sleepBreath {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+  .timer-display {
+    font-family: 'Fredoka One', sans-serif; font-size: 72px;
+    color: var(--darkest-green); line-height: 1; margin-bottom: 10px;
+    letter-spacing: 2px; text-shadow: 3px 3px 0 var(--light-green); transition: color 0.4s ease;
+  }
+  .session-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--light-green); border: 2px solid var(--mid-green); transition: all 0.3s ease; }
+  .dot.filled { background: var(--dark-green); border-color: var(--darkest-green); transform: scale(1.2); }
+  .btn-row { display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; }
+  .btn { font-family: 'Fredoka One', sans-serif; font-size: 18px; border: none; border-radius: 50px; padding: 10px 28px; cursor: pointer; transition: all 0.15s ease; letter-spacing: 0.5px; }
+  .btn:active { transform: scale(0.95); }
+  .btn-primary { background: var(--dark-green); color: var(--cream); box-shadow: 0 4px 0 var(--darkest-green); }
+  .btn-primary:hover { background: var(--darkest-green); box-shadow: 0 2px 0 var(--darkest-green); transform: translateY(2px); }
+  .btn-secondary { background: var(--light-green); color: var(--darkest-green); box-shadow: 0 4px 0 var(--mid-green); }
+  .btn-secondary:hover { background: var(--mid-green); box-shadow: 0 2px 0 var(--mid-green); transform: translateY(2px); }
+  .focus-points { font-size: 13px; color: var(--dark-green); font-weight: 700; }
+  .focus-points span { color: var(--darkest-green); font-size: 15px; }
+  .notif-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(240,244,216,0.88); backdrop-filter: blur(6px);
+    z-index: 100; align-items: center; justify-content: center; flex-direction: column;
+  }
+  .notif-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+  .notif-card {
+    background: white; border: 3px solid var(--dark-green);
+    border-radius: 24px; padding: 32px 36px; text-align: center;
+    box-shadow: 6px 6px 0 var(--darkest-green); max-width: 310px; width: 90%;
+  }
+  .notif-smiski { width: 110px; height: 110px; object-fit: contain; margin-bottom: 12px; }
+  .notif-title { font-family: 'Fredoka One', sans-serif; font-size: 24px; color: var(--darkest-green); margin-bottom: 8px; }
+  .notif-body { font-size: 14px; color: var(--dark-green); margin-bottom: 22px; line-height: 1.5; }
+  .notif-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .break-mode .timer-display { color: var(--green); }
+  .break-mode .ring-progress { stroke: var(--green); }
+  .break-mode .mode-label { color: var(--green); }
+  .running::after {
+    content: ''; position: absolute; inset: -8px; border-radius: 28px;
+    border: 2px solid var(--mid-green); animation: pulse 2s ease-in-out infinite; pointer-events: none;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+</style>
+</head>
+<body>
+
+<div class="sparkle">✦</div>
+<div class="sparkle">✧</div>
+<div class="sparkle">✦</div>
+<div class="sparkle">✧</div>
+<div class="sparkle">✦</div>
+<div class="sparkle">✧</div>
+
+<!-- Notification overlay -->
+<div class="notif-overlay" id="notifOverlay">
+  <div class="notif-card">
+    <img class="notif-smiski" id="notifSmiski" alt="Smiski" />
+    <div class="notif-title" id="notifTitle">Time for a break!</div>
+    <div class="notif-body" id="notifBody">Great work! Take a 5-minute rest.</div>
+    <div class="notif-btns" id="notifBtns"></div>
+  </div>
+</div>
+
+<!-- Timer Card -->
+<div class="timer-card work-mode" id="timerCard">
+  <div class="window-bar">
+    <span class="window-title">✦ Smiski Timer ✦</span>
+    <div class="window-btns"><span></span><span></span></div>
+  </div>
+  <div class="mode-label" id="modeLabel">Stay focused ✦</div>
+  <div class="progress-ring-wrap">
+    <svg width="210" height="210" viewBox="0 0 210 210">
+      <circle class="ring-bg" cx="105" cy="105" r="96"/>
+      <circle class="ring-progress" id="ringProgress" cx="105" cy="105" r="96"
+        stroke-dasharray="603.19" stroke-dashoffset="0"/>
+    </svg>
+    <div class="smiski-wrap">
+      <img class="smiski-img" id="smiskiImg" src="image/work-smiski.png" alt="Smiski" />
+    </div>
+  </div>
+  <div class="timer-display" id="timerDisplay">25:00</div>
+  <div class="session-dots">
+    <div class="dot" id="dot0"></div>
+    <div class="dot" id="dot1"></div>
+    <div class="dot" id="dot2"></div>
+    <div class="dot" id="dot3"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-primary" id="startBtn" onclick="toggleTimer()">Start</button>
+    <button class="btn btn-secondary" onclick="resetTimer()">Reset</button>
+  </div>
+  <div class="focus-points">Focus Points: <span id="focusPoints">0</span> ✦</div>
+</div>
+
+<script>
+  var WORK_IMG = 'image/work-smiski.png';   // shown during 25-min focus
+  var SLEEP_IMG = 'image/sleep-smiski.png'; // shown during 5-min break
+
+  var smiskiImg = document.getElementById('smiskiImg');
+  var notifSmiski = document.getElementById('notifSmiski');
+  smiskiImg.src = WORK_IMG;
+
+  var WORK_TIME = 25 * 60;
+  var BREAK_TIME = 5 * 60;
+  var CIRCUMFERENCE = 2 * Math.PI * 96;
+
+  var timeLeft = WORK_TIME;
+  var totalTime = WORK_TIME;
+  var isRunning = false;
+  var isBreak = false;
+  var interval = null;
+  var sessionsCompleted = 0;
+  var focusPoints = 0;
+
+  function updateDisplay() {
+    var mins = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    var secs = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').textContent = mins + ':' + secs;
+    var offset = CIRCUMFERENCE * (1 - timeLeft / totalTime);
+    document.getElementById('ringProgress').style.strokeDashoffset = offset;
+  }
+
+  function updateDots() {
+    for (var i = 0; i < 4; i++) {
+      document.getElementById('dot' + i).classList.toggle('filled', i < sessionsCompleted % 4);
+    }
+  }
+
+  function toggleTimer() {
+    if (isRunning) {
+      clearInterval(interval);
+      isRunning = false;
+      document.getElementById('startBtn').textContent = 'Resume';
+      document.getElementById('timerCard').classList.remove('running');
+    } else {
+      isRunning = true;
+      document.getElementById('startBtn').textContent = 'Pause';
+      document.getElementById('timerCard').classList.add('running');
+      interval = setInterval(tick, 1000);
+    }
+  }
+
+  function tick() {
+    if (timeLeft > 0) {
+      timeLeft--;
+      updateDisplay();
+    } else {
+      clearInterval(interval);
+      isRunning = false;
+      document.getElementById('timerCard').classList.remove('running');
+      onTimerEnd();
+    }
+  }
+
+  function onTimerEnd() {
+    playChime();
+    if (!isBreak) {
+      sessionsCompleted++;
+      focusPoints += 20;
+      document.getElementById('focusPoints').textContent = focusPoints;
+      updateDots();
+      notifSmiski.src = SLEEP_IMG;
+      showNotif(
+        'Great work, Smiski! +20 pts',
+        'You earned ' + focusPoints + ' focus points! Time for a 5-minute rest.',
+        [
+          { label: 'Start Break ✧', action: startBreak },
+          { label: 'Skip', action: function() { hideNotif(); startWork(); } }
+        ]
+      );
+    } else {
+      notifSmiski.src = WORK_IMG;
+      showNotif(
+        "Break's over!",
+        "Smiski is ready to focus again. Let's get back to work!",
+        [{ label: 'Start Focus ✦', action: function() { hideNotif(); startWork(); } }]
+      );
+    }
+  }
+
+  function startWork() {
+    isBreak = false;
+    timeLeft = WORK_TIME;
+    totalTime = WORK_TIME;
+    document.getElementById('modeLabel').textContent = 'Stay focused ✦';
+    document.getElementById('timerCard').className = 'timer-card work-mode';
+    smiskiImg.src = WORK_IMG;
+    document.getElementById('startBtn').textContent = 'Start';
+    updateDisplay();
+  }
+
+  function startBreak() {
+    hideNotif();
+    isBreak = true;
+    timeLeft = BREAK_TIME;
+    totalTime = BREAK_TIME;
+    document.getElementById('modeLabel').textContent = 'Rest time ✧';
+    document.getElementById('timerCard').className = 'timer-card break-mode';
+    smiskiImg.src = SLEEP_IMG;
+    document.getElementById('startBtn').textContent = 'Pause';
+    updateDisplay();
+    isRunning = true;
+    document.getElementById('timerCard').classList.add('running');
+    interval = setInterval(tick, 1000);
+  }
+
+  function resetTimer() {
+    clearInterval(interval);
+    isRunning = false;
+    hideNotif();
+    document.getElementById('timerCard').classList.remove('running');
+    startWork();
+  }
+
+  function showNotif(title, body, btns) {
+    document.getElementById('notifTitle').textContent = title;
+    document.getElementById('notifBody').textContent = body;
+    var btnContainer = document.getElementById('notifBtns');
+    btnContainer.innerHTML = '';
+    btns.forEach(function(b, i) {
+      var el = document.createElement('button');
+      el.className = 'btn ' + (i === 0 ? 'btn-primary' : 'btn-secondary');
+      el.textContent = b.label;
+      el.onclick = b.action;
+      btnContainer.appendChild(el);
+    });
+    document.getElementById('notifOverlay').classList.add('show');
+  }
+
+  function hideNotif() {
+    document.getElementById('notifOverlay').classList.remove('show');
+  }
+
+  function playChime() {
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      var notes = isBreak ? [523, 659, 784] : [784, 659, 523, 659, 784];
+      notes.forEach(function(freq, i) {
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.value = freq; osc.type = 'sine';
+        gain.gain.setValueAtTime(0.25, ctx.currentTime + i * 0.18);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.18 + 0.4);
+        osc.start(ctx.currentTime + i * 0.18);
+        osc.stop(ctx.currentTime + i * 0.18 + 0.5);
+      });
+    } catch(e) {}
+  }
+
+  updateDisplay();
+</script>
+</body>
+</html>
