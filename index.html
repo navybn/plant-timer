@@ -4,16 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pomodoro Timer</title>
+<link rel="icon" type="image/png" href="image/Plant.png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #F3F5E3;
-    --light-green: #DDE3BA;
-    --mid-green: #B6C77B;
-    --green: #92AA58;
-    --dark-green: #6B7F3A;
-    --darkest-green: #455826;
-    --shadow: rgba(69, 88, 38, 0.15);
+    --cream: #F6F5F1;
+    --light-green: #DFE3DA;
+    --mid-green: #C3CFBF;
+    --green: #9BAE96;
+    --dark-green: #74866F;
+    --darkest-green: #4E5A4A;
+    --shadow: #323c2e;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -180,7 +181,7 @@
         stroke-dasharray="603.19" stroke-dashoffset="0"/>
     </svg>
     <div class="smiski-wrap">
-      <img class="smiski-img" id="smiskiImg" src="image/work-smiski.png" alt="Smiski" />
+      <img class="smiski-img" id="smiskiImg" src="image/Plant.png" alt="Smiski" />
     </div>
   </div>
   <div class="timer-display" id="timerDisplay">25:00</div>
@@ -198,8 +199,8 @@
 </div>
 
 <script>
-  var WORK_IMG = 'image/work-smiski.png';   // shown during 25-min focus
-  var SLEEP_IMG = 'image/sleep-smiski.png'; // shown during 5-min break
+  var WORK_IMG = 'image/Plant.png';   // shown during 25-min focus
+  var SLEEP_IMG = 'image/tea-bag.png'; // shown during 5-min break
 
   var smiskiImg = document.getElementById('smiskiImg');
   var notifSmiski = document.getElementById('notifSmiski');
