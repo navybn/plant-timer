@@ -52,8 +52,13 @@
     0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
     50% { transform: translateY(-14px) rotate(20deg); opacity: 0.8; }
   }
-  .timer-card {
-    position: relative; z-index: 2;
+
+  /* ── PAGES ── */
+  .page { display: none; position: relative; z-index: 2; width: 100%; align-items: center; justify-content: center; }
+  .page.active { display: flex; }
+
+  /* ── SHARED CARD ── */
+  .card {
     background: white;
     border: 3px solid var(--dark-green);
     border-radius: 24px;
@@ -61,7 +66,6 @@
     width: 340px;
     text-align: center;
     box-shadow: 6px 6px 0px var(--darkest-green), 0 20px 60px var(--shadow);
-    transition: all 0.4s ease;
   }
   .window-bar {
     background: var(--dark-green); border-radius: 12px 12px 0 0;
@@ -71,81 +75,77 @@
   .window-title { color: var(--cream); font-family: 'Fredoka One', sans-serif; font-size: 14px; letter-spacing: 0.5px; }
   .window-btns { display: flex; gap: 6px; }
   .window-btns span { width: 12px; height: 12px; border-radius: 50%; background: var(--mid-green); border: 1.5px solid var(--darkest-green); display: inline-block; }
-  .mode-label {
-    font-family: 'Fredoka One', sans-serif; font-size: 20px;
-    color: var(--darkest-green); margin-bottom: 14px; letter-spacing: 0.5px; transition: all 0.4s ease;
-  }
-  .progress-ring-wrap {
-    position: relative; width: 210px; height: 210px; margin: 0 auto 6px;
-  }
-  .progress-ring-wrap svg { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
-  .ring-bg { fill: none; stroke: var(--light-green); stroke-width: 6; }
-  .ring-progress {
-    fill: none; stroke: var(--dark-green); stroke-width: 6; stroke-linecap: round;
-    transition: stroke-dashoffset 1s linear, stroke 0.4s ease;
-  }
-  .smiski-wrap {
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 148px; height: 148px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .smiski-img {
-    width: 100%; height: 100%; object-fit: contain;
-    filter: drop-shadow(0 4px 12px rgba(107,127,58,0.2));
-    transition: opacity 0.4s ease;
-  }
-  .work-mode .smiski-img { animation: workBob 2.8s ease-in-out infinite; }
-  @keyframes workBob {
-    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
-    50% { transform: translateY(-7px) rotate(1.5deg); }
-  }
-  .break-mode .smiski-img { animation: sleepBreath 3.5s ease-in-out infinite; }
-  @keyframes sleepBreath {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.06); }
-  }
-  .timer-display {
-    font-family: 'Fredoka One', sans-serif; font-size: 72px;
-    color: var(--darkest-green); line-height: 1; margin-bottom: 10px;
-    letter-spacing: 2px; text-shadow: 3px 3px 0 var(--light-green); transition: color 0.4s ease;
-  }
-  .session-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
-  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--light-green); border: 2px solid var(--mid-green); transition: all 0.3s ease; }
-  .dot.filled { background: var(--dark-green); border-color: var(--darkest-green); transform: scale(1.2); }
-  .btn-row { display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; }
+
   .btn { font-family: 'Fredoka One', sans-serif; font-size: 18px; border: none; border-radius: 50px; padding: 10px 28px; cursor: pointer; transition: all 0.15s ease; letter-spacing: 0.5px; }
   .btn:active { transform: scale(0.95); }
   .btn-primary { background: var(--dark-green); color: var(--cream); box-shadow: 0 4px 0 var(--darkest-green); }
   .btn-primary:hover { background: var(--darkest-green); box-shadow: 0 2px 0 var(--darkest-green); transform: translateY(2px); }
   .btn-secondary { background: var(--light-green); color: var(--darkest-green); box-shadow: 0 4px 0 var(--mid-green); }
   .btn-secondary:hover { background: var(--mid-green); box-shadow: 0 2px 0 var(--mid-green); transform: translateY(2px); }
-  .focus-points { font-size: 13px; color: var(--dark-green); font-weight: 700; }
+  .btn-danger { background: #c97a7a; color: white; box-shadow: 0 4px 0 #a05a5a; font-size: 14px; padding: 8px 20px; }
+  .btn-danger:hover { background: #a05a5a; box-shadow: 0 2px 0 #a05a5a; transform: translateY(2px); }
+
+  /* ── START PAGE ── */
+  .start-hero { width: 130px; height: 130px; object-fit: contain; margin: 20px auto 12px; display: block; animation: workBob 2.8s ease-in-out infinite; }
+  .start-title { font-family: 'Fredoka One', sans-serif; font-size: 26px; color: var(--darkest-green); margin-bottom: 8px; }
+  .start-sub { font-size: 13px; color: var(--dark-green); margin-bottom: 24px; line-height: 1.5; }
+
+  /* ── TIMER PAGE ── */
+  .timer-card { transition: all 0.4s ease; }
+  .mode-label { font-family: 'Fredoka One', sans-serif; font-size: 20px; color: var(--darkest-green); margin-bottom: 14px; letter-spacing: 0.5px; transition: all 0.4s ease; }
+  .progress-ring-wrap { position: relative; width: 210px; height: 210px; margin: 0 auto 6px; }
+  .progress-ring-wrap svg { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--light-green); stroke-width: 6; }
+  .ring-progress { fill: none; stroke: var(--dark-green); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke 0.4s ease; }
+  .smiski-wrap { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 148px; height: 148px; display: flex; align-items: center; justify-content: center; }
+  .smiski-img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(107,127,58,0.2)); transition: opacity 0.4s ease; }
+  .work-mode .smiski-img { animation: workBob 2.8s ease-in-out infinite; }
+  @keyframes workBob { 0%, 100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-7px) rotate(1.5deg); } }
+  .break-mode .smiski-img { animation: sleepBreath 3.5s ease-in-out infinite; }
+  @keyframes sleepBreath { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+  .timer-display { font-family: 'Fredoka One', sans-serif; font-size: 72px; color: var(--darkest-green); line-height: 1; margin-bottom: 10px; letter-spacing: 2px; text-shadow: 3px 3px 0 var(--light-green); transition: color 0.4s ease; }
+  .session-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--light-green); border: 2px solid var(--mid-green); transition: all 0.3s ease; }
+  .dot.filled { background: var(--dark-green); border-color: var(--darkest-green); transform: scale(1.2); }
+  .btn-row { display: flex; gap: 12px; justify-content: center; margin-bottom: 12px; }
+  .focus-points { font-size: 13px; color: var(--dark-green); font-weight: 700; margin-bottom: 12px; }
   .focus-points span { color: var(--darkest-green); font-size: 15px; }
-  .notif-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(240,244,216,0.88); backdrop-filter: blur(6px);
-    z-index: 100; align-items: center; justify-content: center; flex-direction: column;
-  }
+  .end-btn-wrap { border-top: 1.5px solid var(--light-green); padding-top: 12px; margin-top: 4px; }
+  .break-mode .timer-display { color: var(--green); }
+  .break-mode .ring-progress { stroke: var(--green); }
+  .break-mode .mode-label { color: var(--green); }
+  .running::after { content: ''; position: absolute; inset: -8px; border-radius: 28px; border: 2px solid var(--mid-green); animation: pulse 2s ease-in-out infinite; pointer-events: none; }
+  @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+
+  /* ── STATS PAGE ── */
+  #statsPage .card { width: 360px; }
+  .stats-hero { width: 90px; height: 90px; object-fit: contain; margin: 16px auto 10px; display: block; animation: workBob 3s ease-in-out infinite; }
+  .stats-title { font-family: 'Fredoka One', sans-serif; font-size: 24px; color: var(--darkest-green); margin-bottom: 4px; }
+  .stats-sub { font-size: 13px; color: var(--dark-green); margin-bottom: 20px; line-height: 1.4; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  .stat-box { background: var(--light-green); border-radius: 14px; padding: 12px 10px; border: 2px solid var(--mid-green); }
+  .stat-val { font-family: 'Fredoka One', sans-serif; font-size: 26px; color: var(--darkest-green); line-height: 1; }
+  .stat-lbl { font-size: 11px; color: var(--dark-green); font-weight: 700; margin-top: 3px; letter-spacing: 0.4px; text-transform: uppercase; }
+  .stat-box.wide { grid-column: 1 / -1; }
+  .stat-badge { display: inline-block; background: var(--dark-green); color: var(--cream); font-family: 'Fredoka One', sans-serif; font-size: 18px; border-radius: 50px; padding: 6px 20px; margin-bottom: 18px; }
+
+  /* ── NOTIF OVERLAY ── */
+  .notif-overlay { display: none; position: fixed; inset: 0; background: rgba(240,244,216,0.88); backdrop-filter: blur(6px); z-index: 100; align-items: center; justify-content: center; flex-direction: column; }
   .notif-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-  .notif-card {
-    background: white; border: 3px solid var(--dark-green);
-    border-radius: 24px; padding: 32px 36px; text-align: center;
-    box-shadow: 6px 6px 0 var(--darkest-green); max-width: 310px; width: 90%;
-  }
+  .notif-card { background: white; border: 3px solid var(--dark-green); border-radius: 24px; padding: 32px 36px; text-align: center; box-shadow: 6px 6px 0 var(--darkest-green); max-width: 310px; width: 90%; }
   .notif-smiski { width: 110px; height: 110px; object-fit: contain; margin-bottom: 12px; }
   .notif-title { font-family: 'Fredoka One', sans-serif; font-size: 24px; color: var(--darkest-green); margin-bottom: 8px; }
   .notif-body { font-size: 14px; color: var(--dark-green); margin-bottom: 22px; line-height: 1.5; }
   .notif-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .break-mode .timer-display { color: var(--green); }
-  .break-mode .ring-progress { stroke: var(--green); }
-  .break-mode .mode-label { color: var(--green); }
-  .running::after {
-    content: ''; position: absolute; inset: -8px; border-radius: 28px;
-    border: 2px solid var(--mid-green); animation: pulse 2s ease-in-out infinite; pointer-events: none;
-  }
-  @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+
+  /* ── CONFIRM END OVERLAY ── */
+  .confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(240,244,216,0.88); backdrop-filter: blur(6px); z-index: 200; align-items: center; justify-content: center; }
+  .confirm-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
+  .confirm-card { background: white; border: 3px solid var(--dark-green); border-radius: 24px; padding: 28px 32px; text-align: center; box-shadow: 6px 6px 0 var(--darkest-green); max-width: 290px; width: 90%; }
+  .confirm-title { font-family: 'Fredoka One', sans-serif; font-size: 20px; color: var(--darkest-green); margin-bottom: 8px; }
+  .confirm-body { font-size: 13px; color: var(--dark-green); margin-bottom: 20px; line-height: 1.5; }
+  .confirm-btns { display: flex; gap: 10px; justify-content: center; }
 </style>
 </head>
 <body>
@@ -157,7 +157,7 @@
 <div class="sparkle">✦</div>
 <div class="sparkle">✧</div>
 
-<!-- Notification overlay -->
+<!-- Notification overlay (break/focus transitions) -->
 <div class="notif-overlay" id="notifOverlay">
   <div class="notif-card">
     <img class="notif-smiski" id="notifSmiski" alt="Smiski" />
@@ -167,40 +167,108 @@
   </div>
 </div>
 
-<!-- Timer Card -->
-<div class="timer-card work-mode" id="timerCard">
-  <div class="window-bar">
-    <span class="window-title">✦ Study Timer ✦</span>
-    <div class="window-btns"><span></span><span></span></div>
-  </div>
-  <div class="mode-label" id="modeLabel">Stay focused ✦</div>
-  <div class="progress-ring-wrap">
-    <svg width="210" height="210" viewBox="0 0 210 210">
-      <circle class="ring-bg" cx="105" cy="105" r="96"/>
-      <circle class="ring-progress" id="ringProgress" cx="105" cy="105" r="96"
-        stroke-dasharray="603.19" stroke-dashoffset="0"/>
-    </svg>
-    <div class="smiski-wrap">
-      <img class="smiski-img" id="smiskiImg" src="image/Plant.png" alt="Smiski" />
+<!-- Confirm end overlay -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-card">
+    <div class="confirm-title">End session? 🌿</div>
+    <div class="confirm-body">Your progress will be saved and you'll see your study summary.</div>
+    <div class="confirm-btns">
+      <button class="btn btn-primary" onclick="confirmEnd()">Yes, end it</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('confirmOverlay').classList.remove('show')">Keep going</button>
     </div>
   </div>
-  <div class="timer-display" id="timerDisplay">25:00</div>
-  <div class="session-dots">
-    <div class="dot" id="dot0"></div>
-    <div class="dot" id="dot1"></div>
-    <div class="dot" id="dot2"></div>
-    <div class="dot" id="dot3"></div>
+</div>
+
+<!-- ═══ START PAGE ═══ -->
+<div class="page active" id="startPage">
+  <div class="card">
+    <div class="window-bar">
+      <span class="window-title">✦ Study Timer ✦</span>
+      <div class="window-btns"><span></span><span></span></div>
+    </div>
+    <img class="start-hero" src="image/Plant.png" alt="plant" />
+    <div class="start-title">Ready to focus?</div>
+    <div class="start-sub">Each session is 25 minutes of focused work followed by a 5-minute break. Earn focus points as you go! ✦</div>
+    <button class="btn btn-primary" onclick="goToTimer()" style="width:100%">Start Study Session ✦</button>
   </div>
-  <div class="btn-row">
-    <button class="btn btn-primary" id="startBtn" onclick="toggleTimer()">Start</button>
-    <button class="btn btn-secondary" onclick="resetTimer()">Reset</button>
+</div>
+
+<!-- ═══ TIMER PAGE ═══ -->
+<div class="page" id="timerPage">
+  <div class="card timer-card work-mode" id="timerCard">
+    <div class="window-bar">
+      <span class="window-title">✦ Study Timer ✦</span>
+      <div class="window-btns"><span></span><span></span></div>
+    </div>
+    <div class="mode-label" id="modeLabel">Stay focused ✦</div>
+    <div class="progress-ring-wrap">
+      <svg width="210" height="210" viewBox="0 0 210 210">
+        <circle class="ring-bg" cx="105" cy="105" r="96"/>
+        <circle class="ring-progress" id="ringProgress" cx="105" cy="105" r="96"
+          stroke-dasharray="603.19" stroke-dashoffset="0"/>
+      </svg>
+      <div class="smiski-wrap">
+        <img class="smiski-img" id="smiskiImg" src="image/Plant.png" alt="Smiski" />
+      </div>
+    </div>
+    <div class="timer-display" id="timerDisplay">25:00</div>
+    <div class="session-dots">
+      <div class="dot" id="dot0"></div>
+      <div class="dot" id="dot1"></div>
+      <div class="dot" id="dot2"></div>
+      <div class="dot" id="dot3"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="startBtn" onclick="toggleTimer()">Start</button>
+      <button class="btn btn-secondary" onclick="resetTimer()">Reset</button>
+    </div>
+    <div class="focus-points">Focus Points: <span id="focusPoints">0</span> ✦</div>
+    <div class="end-btn-wrap">
+      <button class="btn btn-danger" onclick="askEndSession()">End Study Session</button>
+    </div>
   </div>
-  <div class="focus-points">Focus Points: <span id="focusPoints">0</span> ✦</div>
+</div>
+
+<!-- ═══ STATS PAGE ═══ -->
+<div class="page" id="statsPage">
+  <div class="card">
+    <div class="window-bar">
+      <span class="window-title">✦ Session Summary ✦</span>
+      <div class="window-btns"><span></span><span></span></div>
+    </div>
+    <img class="stats-hero" src="image/Plant.png" alt="plant" />
+    <div class="stats-title">Great work! ✦</div>
+    <div class="stats-sub" id="statsSubtitle">Here's how your session went.</div>
+    <div class="stat-badge" id="statsBadge">0 Focus Points</div>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-val" id="statHours">0m</div>
+        <div class="stat-lbl">Time Studied</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="statSessions">0</div>
+        <div class="stat-lbl">Sessions Done</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="statPauses">0</div>
+        <div class="stat-lbl">Times Paused</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="statBreaks">0</div>
+        <div class="stat-lbl">Breaks Taken</div>
+      </div>
+      <div class="stat-box wide">
+        <div class="stat-val" id="statAvgSession">—</div>
+        <div class="stat-lbl">Avg Focus Session</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="startNewSession()" style="width:100%">New Session ✦</button>
+  </div>
 </div>
 
 <script>
-  var WORK_IMG = 'image/Plant.png';   // shown during 25-min focus
-  var SLEEP_IMG = 'image/tea-bag.png'; // shown during 5-min break
+  var WORK_IMG = 'image/Plant.png';
+  var SLEEP_IMG = 'image/tea-bag.png';
 
   var smiskiImg = document.getElementById('smiskiImg');
   var notifSmiski = document.getElementById('notifSmiski');
@@ -217,6 +285,23 @@
   var interval = null;
   var sessionsCompleted = 0;
   var focusPoints = 0;
+  var pauseCount = 0;
+  var breaksCompleted = 0;
+  var totalStudiedSecs = 0;
+
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+  }
+
+  function goToTimer() {
+    showPage('timerPage');
+    resetAll();
+  }
+
+  function startNewSession() {
+    showPage('startPage');
+  }
 
   function updateDisplay() {
     var mins = Math.floor(timeLeft / 60).toString().padStart(2, '0');
@@ -236,6 +321,7 @@
     if (isRunning) {
       clearInterval(interval);
       isRunning = false;
+      pauseCount++;
       document.getElementById('startBtn').textContent = 'Resume';
       document.getElementById('timerCard').classList.remove('running');
     } else {
@@ -249,6 +335,7 @@
   function tick() {
     if (timeLeft > 0) {
       timeLeft--;
+      if (!isBreak) totalStudiedSecs++;
       updateDisplay();
     } else {
       clearInterval(interval);
@@ -275,6 +362,7 @@
         ]
       );
     } else {
+      breaksCompleted++;
       notifSmiski.src = WORK_IMG;
       showNotif(
         "Break's over!",
@@ -289,7 +377,7 @@
     timeLeft = WORK_TIME;
     totalTime = WORK_TIME;
     document.getElementById('modeLabel').textContent = 'Stay focused ✦';
-    document.getElementById('timerCard').className = 'timer-card work-mode';
+    document.getElementById('timerCard').className = 'card timer-card work-mode';
     smiskiImg.src = WORK_IMG;
     document.getElementById('startBtn').textContent = 'Start';
     updateDisplay();
@@ -301,7 +389,7 @@
     timeLeft = BREAK_TIME;
     totalTime = BREAK_TIME;
     document.getElementById('modeLabel').textContent = 'Rest time ✧';
-    document.getElementById('timerCard').className = 'timer-card break-mode';
+    document.getElementById('timerCard').className = 'card timer-card break-mode';
     smiskiImg.src = SLEEP_IMG;
     document.getElementById('startBtn').textContent = 'Pause';
     updateDisplay();
@@ -316,6 +404,57 @@
     hideNotif();
     document.getElementById('timerCard').classList.remove('running');
     startWork();
+  }
+
+  function resetAll() {
+    clearInterval(interval);
+    isRunning = false; isBreak = false; interval = null;
+    sessionsCompleted = 0; focusPoints = 0; pauseCount = 0;
+    breaksCompleted = 0; totalStudiedSecs = 0;
+    document.getElementById('focusPoints').textContent = '0';
+    updateDots();
+    startWork();
+  }
+
+  function askEndSession() {
+    document.getElementById('confirmOverlay').classList.add('show');
+  }
+
+  function confirmEnd() {
+    clearInterval(interval);
+    isRunning = false;
+    hideNotif();
+    document.getElementById('confirmOverlay').classList.remove('show');
+    showStats();
+  }
+
+  function showStats() {
+    var totalMins = Math.floor(totalStudiedSecs / 60);
+    var hrs = Math.floor(totalMins / 60);
+    var mins = totalMins % 60;
+    var timeStr = hrs > 0 ? hrs + 'h ' + mins + 'm' : (totalMins > 0 ? totalMins + 'm' : '0m');
+
+    document.getElementById('statsBadge').textContent = focusPoints + ' Focus Points ✦';
+    document.getElementById('statHours').textContent = timeStr;
+    document.getElementById('statSessions').textContent = sessionsCompleted;
+    document.getElementById('statPauses').textContent = pauseCount;
+    document.getElementById('statBreaks').textContent = breaksCompleted;
+
+    if (sessionsCompleted > 0) {
+      var avgMins = Math.round(totalMins / sessionsCompleted);
+      document.getElementById('statAvgSession').textContent = avgMins + ' min';
+    } else {
+      document.getElementById('statAvgSession').textContent = '—';
+    }
+
+    var sub = sessionsCompleted === 0
+      ? "You ended early — that's okay, every bit counts!"
+      : sessionsCompleted === 1
+      ? 'You completed 1 full focus session. Keep building the habit!'
+      : 'You crushed it with ' + sessionsCompleted + ' sessions today!';
+    document.getElementById('statsSubtitle').textContent = sub;
+
+    showPage('statsPage');
   }
 
   function showNotif(title, body, btns) {
