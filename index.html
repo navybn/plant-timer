@@ -22,7 +22,7 @@
     background: var(--cream);
     min-height: 100vh;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     overflow-x: hidden;
     position: relative;
@@ -54,11 +54,9 @@
     50% { transform: translateY(-14px) rotate(20deg); opacity: 0.8; }
   }
 
-  /* ── PAGES ── */
-  .page { display: none; position: relative; z-index: 2; width: 100%; align-items: flex-start; justify-content: center; }
+  .page { display: none; position: relative; z-index: 2; width: 100%; align-items: center; justify-content: center; }
   .page.active { display: flex; }
 
-  /* ── SHARED CARD ── */
   .card {
     background: white;
     border: 3px solid var(--dark-green);
@@ -105,14 +103,9 @@
   .mode-option-badge { font-family: 'Fredoka One', sans-serif; font-size: 13px; color: var(--dark-green); background: var(--cream); border-radius: 50px; padding: 3px 10px; border: 1.5px solid var(--mid-green); white-space: nowrap; }
   .mode-option.selected .mode-option-badge { background: var(--light-green); border-color: var(--dark-green); }
 
-  /* ── TIMER + TODO LAYOUT ── */
-  #timerPage {
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
   /* ── TIMER PAGE ── */
-  .timer-card { transition: all 0.4s ease; flex-shrink: 0; }
+  #timerPage .card { width: 360px; }
+  .timer-card { transition: all 0.4s ease; }
   .mode-label { font-family: 'Fredoka One', sans-serif; font-size: 20px; color: var(--darkest-green); margin-bottom: 14px; letter-spacing: 0.5px; transition: all 0.4s ease; }
   .progress-ring-wrap { position: relative; width: 210px; height: 210px; margin: 0 auto 6px; }
   .progress-ring-wrap svg { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
@@ -131,47 +124,53 @@
   .btn-row { display: flex; gap: 12px; justify-content: center; margin-bottom: 12px; }
   .focus-points { font-size: 13px; color: var(--dark-green); font-weight: 700; margin-bottom: 12px; }
   .focus-points span { color: var(--darkest-green); font-size: 15px; }
-  .end-btn-wrap { border-top: 1.5px solid var(--light-green); padding-top: 12px; margin-top: 4px; }
   .break-mode .timer-display { color: var(--green); }
   .break-mode .ring-progress { stroke: var(--green); }
   .break-mode .mode-label { color: var(--green); }
   .running::after { content: ''; position: absolute; inset: -8px; border-radius: 28px; border: 2px solid var(--mid-green); animation: pulse 2s ease-in-out infinite; pointer-events: none; }
   @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
 
-  /* ── TO-DO CARD ── */
-  .todo-card {
-    background: white;
-    border: 3px solid var(--dark-green);
-    border-radius: 24px;
-    padding: 36px 28px 28px;
-    width: 300px;
-    box-shadow: 6px 6px 0px var(--darkest-green), 0 20px 60px var(--shadow);
-    display: flex;
-    flex-direction: column;
-    align-self: flex-start;
+  /* ── TO-DO SECTION (inside card) ── */
+  .todo-section {
+    border-top: 2px solid var(--light-green);
+    margin-top: 16px;
+    padding-top: 14px;
   }
-  .todo-title {
+  .todo-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .todo-section-title {
     font-family: 'Fredoka One', sans-serif;
-    font-size: 18px;
+    font-size: 15px;
     color: var(--darkest-green);
-    margin-bottom: 14px;
-    text-align: center;
-    letter-spacing: 0.4px;
+    letter-spacing: 0.3px;
+  }
+  .todo-count-badge {
+    font-family: 'Fredoka One', sans-serif;
+    font-size: 12px;
+    color: var(--dark-green);
+    background: var(--light-green);
+    border-radius: 50px;
+    padding: 2px 9px;
+    border: 1.5px solid var(--mid-green);
   }
   .todo-input-row {
     display: flex;
     gap: 8px;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
   }
   .todo-input {
     flex: 1;
     font-family: 'Nunito', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     background: var(--light-green);
     border: 2px solid var(--mid-green);
     border-radius: 50px;
-    padding: 8px 14px;
+    padding: 7px 13px;
     color: var(--darkest-green);
     outline: none;
     transition: border-color 0.15s;
@@ -180,13 +179,13 @@
   .todo-input:focus { border-color: var(--dark-green); background: white; }
   .todo-add-btn {
     font-family: 'Fredoka One', sans-serif;
-    font-size: 20px;
+    font-size: 18px;
     background: var(--dark-green);
     color: var(--cream);
     border: none;
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -197,122 +196,90 @@
     padding-bottom: 2px;
   }
   .todo-add-btn:hover { background: var(--darkest-green); transform: translateY(2px); box-shadow: 0 1px 0 var(--darkest-green); }
-  .todo-add-btn:active { transform: scale(0.92); }
   .todo-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    max-height: 380px;
+    gap: 6px;
+    max-height: 200px;
     overflow-y: auto;
-    padding-right: 2px;
+    margin-bottom: 8px;
   }
-  .todo-list::-webkit-scrollbar { width: 4px; }
+  .todo-list::-webkit-scrollbar { width: 3px; }
   .todo-list::-webkit-scrollbar-track { background: var(--light-green); border-radius: 4px; }
   .todo-list::-webkit-scrollbar-thumb { background: var(--mid-green); border-radius: 4px; }
   .todo-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     background: var(--light-green);
     border: 2px solid var(--mid-green);
-    border-radius: 14px;
-    padding: 10px 12px;
+    border-radius: 12px;
+    padding: 8px 10px;
+    text-align: left;
     transition: all 0.2s ease;
-    animation: slideIn 0.25s ease;
+    animation: slideIn 0.2s ease;
   }
   @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-8px); }
+    from { opacity: 0; transform: translateY(-6px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  .todo-item.done {
-    background: white;
-    border-color: var(--light-green);
-    opacity: 0.65;
-  }
+  .todo-item.done { background: white; border-color: var(--light-green); opacity: 0.6; }
   .todo-check {
-    width: 20px;
-    height: 20px;
+    width: 18px; height: 18px;
     border-radius: 50%;
-    border: 2.5px solid var(--dark-green);
+    border: 2px solid var(--dark-green);
     background: white;
     cursor: pointer;
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     transition: all 0.15s;
-    font-size: 11px;
+    font-size: 10px;
     color: transparent;
   }
-  .todo-item.done .todo-check {
-    background: var(--dark-green);
-    color: var(--cream);
-  }
+  .todo-item.done .todo-check { background: var(--dark-green); color: var(--cream); }
   .todo-check:hover { background: var(--mid-green); }
   .todo-text {
     flex: 1;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--darkest-green);
-    line-height: 1.4;
+    line-height: 1.3;
     word-break: break-word;
-    transition: all 0.2s;
   }
-  .todo-item.done .todo-text {
-    text-decoration: line-through;
-    color: var(--green);
-  }
+  .todo-item.done .todo-text { text-decoration: line-through; color: var(--green); }
   .todo-delete {
-    background: none;
-    border: none;
-    font-size: 14px;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.15s;
-    color: #c97a7a;
-    padding: 2px 4px;
-    border-radius: 6px;
+    background: none; border: none;
+    font-size: 11px; cursor: pointer;
+    opacity: 0; transition: opacity 0.15s;
+    color: #c97a7a; padding: 2px 3px; border-radius: 4px;
     flex-shrink: 0;
   }
   .todo-item:hover .todo-delete { opacity: 1; }
   .todo-delete:hover { background: #f8e8e8; }
   .todo-empty {
-    text-align: center;
-    font-size: 12px;
-    color: var(--green);
-    font-weight: 700;
-    padding: 24px 0 10px;
-    line-height: 1.6;
+    text-align: center; font-size: 12px;
+    color: var(--green); font-weight: 700;
+    padding: 10px 0 4px; line-height: 1.5;
   }
-  .todo-progress {
-    margin-top: 14px;
-    padding-top: 12px;
-    border-top: 1.5px solid var(--light-green);
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  .todo-progress-row {
+    display: flex; align-items: center; gap: 8px;
   }
   .todo-progress-bar-wrap {
-    flex: 1;
-    height: 8px;
+    flex: 1; height: 6px;
     background: var(--light-green);
-    border-radius: 50px;
-    overflow: hidden;
+    border-radius: 50px; overflow: hidden;
     border: 1.5px solid var(--mid-green);
   }
   .todo-progress-bar {
-    height: 100%;
-    background: var(--dark-green);
-    border-radius: 50px;
-    transition: width 0.4s ease;
-    width: 0%;
+    height: 100%; background: var(--dark-green);
+    border-radius: 50px; transition: width 0.4s ease; width: 0%;
   }
   .todo-progress-label {
     font-family: 'Fredoka One', sans-serif;
-    font-size: 13px;
-    color: var(--darkest-green);
-    white-space: nowrap;
+    font-size: 12px; color: var(--darkest-green); white-space: nowrap;
   }
+
+  .end-btn-wrap { border-top: 1.5px solid var(--light-green); padding-top: 12px; margin-top: 16px; }
 
   /* ── STATS PAGE ── */
   #statsPage .card { width: 360px; }
@@ -326,7 +293,7 @@
   .stat-box.wide { grid-column: 1 / -1; }
   .stat-badge { display: inline-block; background: var(--dark-green); color: var(--cream); font-family: 'Fredoka One', sans-serif; font-size: 18px; border-radius: 50px; padding: 6px 20px; margin-bottom: 18px; }
 
-  /* ── NOTIF OVERLAY ── */
+  /* ── OVERLAYS ── */
   .notif-overlay { display: none; position: fixed; inset: 0; background: rgba(240,244,216,0.88); backdrop-filter: blur(6px); z-index: 100; align-items: center; justify-content: center; flex-direction: column; }
   .notif-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
@@ -335,21 +302,12 @@
   .notif-title { font-family: 'Fredoka One', sans-serif; font-size: 24px; color: var(--darkest-green); margin-bottom: 8px; }
   .notif-body { font-size: 14px; color: var(--dark-green); margin-bottom: 22px; line-height: 1.5; }
   .notif-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-
-  /* ── CONFIRM END OVERLAY ── */
   .confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(240,244,216,0.88); backdrop-filter: blur(6px); z-index: 200; align-items: center; justify-content: center; }
   .confirm-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
   .confirm-card { background: white; border: 3px solid var(--dark-green); border-radius: 24px; padding: 28px 32px; text-align: center; box-shadow: 6px 6px 0 var(--darkest-green); max-width: 290px; width: 90%; }
   .confirm-title { font-family: 'Fredoka One', sans-serif; font-size: 20px; color: var(--darkest-green); margin-bottom: 8px; }
   .confirm-body { font-size: 13px; color: var(--dark-green); margin-bottom: 20px; line-height: 1.5; }
   .confirm-btns { display: flex; gap: 10px; justify-content: center; }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 700px) {
-    #timerPage { flex-direction: column; align-items: center; }
-    .todo-card { width: 340px; }
-    body { padding: 16px 12px; }
-  }
 </style>
 </head>
 <body>
@@ -361,7 +319,6 @@
 <div class="sparkle">✦</div>
 <div class="sparkle">✧</div>
 
-<!-- Notification overlay -->
 <div class="notif-overlay" id="notifOverlay">
   <div class="notif-card">
     <img class="notif-smiski" id="notifSmiski" alt="Smiski" />
@@ -371,7 +328,6 @@
   </div>
 </div>
 
-<!-- Confirm end overlay -->
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-card">
     <div class="confirm-title">End session? 🌿</div>
@@ -422,8 +378,6 @@
 
 <!-- ═══ TIMER PAGE ═══ -->
 <div class="page" id="timerPage">
-
-  <!-- Timer card -->
   <div class="card timer-card work-mode" id="timerCard">
     <div class="window-bar">
       <span class="window-title">✦ Study Timer ✦</span>
@@ -452,33 +406,33 @@
       <button class="btn btn-secondary" onclick="resetTimer()">Reset</button>
     </div>
     <div class="focus-points">Focus Points: <span id="focusPoints">0</span> ✦</div>
+
+    <!-- ── TO-DO SECTION ── -->
+    <div class="todo-section">
+      <div class="todo-section-header">
+        <div class="todo-section-title">✦ To-Do</div>
+        <div class="todo-count-badge" id="todoCountBadge">0/0</div>
+      </div>
+      <div class="todo-input-row">
+        <input class="todo-input" id="todoInput" type="text" placeholder="Add a task..." maxlength="80"
+          onkeydown="if(event.key==='Enter') addTodo()" />
+        <button class="todo-add-btn" onclick="addTodo()">+</button>
+      </div>
+      <div class="todo-list" id="todoList">
+        <div class="todo-empty" id="todoEmpty">No tasks yet — add one above! ✧</div>
+      </div>
+      <div class="todo-progress-row" id="todoProgressRow" style="display:none; margin-top:8px;">
+        <div class="todo-progress-bar-wrap">
+          <div class="todo-progress-bar" id="todoProgressBar"></div>
+        </div>
+        <div class="todo-progress-label" id="todoProgressLabel">0/0</div>
+      </div>
+    </div>
+
     <div class="end-btn-wrap">
       <button class="btn btn-danger" onclick="askEndSession()">End Study Session</button>
     </div>
   </div>
-
-  <!-- To-do card -->
-  <div class="todo-card">
-    <div class="window-bar" style="margin:-36px -28px 20px -28px">
-      <span class="window-title">✦ To-Do List ✦</span>
-      <div class="window-btns"><span></span><span></span></div>
-    </div>
-    <div class="todo-input-row">
-      <input class="todo-input" id="todoInput" type="text" placeholder="Add a task..." maxlength="80"
-        onkeydown="if(event.key==='Enter') addTodo()" />
-      <button class="todo-add-btn" onclick="addTodo()">+</button>
-    </div>
-    <div class="todo-list" id="todoList">
-      <div class="todo-empty" id="todoEmpty">No tasks yet! ✦<br>Add something to work on.</div>
-    </div>
-    <div class="todo-progress" id="todoProgress" style="display:none">
-      <div class="todo-progress-bar-wrap">
-        <div class="todo-progress-bar" id="todoProgressBar"></div>
-      </div>
-      <div class="todo-progress-label" id="todoProgressLabel">0/0</div>
-    </div>
-  </div>
-
 </div>
 
 <!-- ═══ STATS PAGE ═══ -->
@@ -529,29 +483,18 @@
     { name: 'Power Hour', work: 60 * 60, brk: 15 * 60, pts: 50 }
   ];
   var selectedMode = 0;
-
   var WORK_IMG = 'image/Plant.png';
   var SLEEP_IMG = 'image/tea-bag.png';
-
   var smiskiImg = document.getElementById('smiskiImg');
   var notifSmiski = document.getElementById('notifSmiski');
   smiskiImg.src = WORK_IMG;
-
   var WORK_TIME = MODES[0].work;
   var BREAK_TIME = MODES[0].brk;
   var PTS_PER_SESSION = MODES[0].pts;
   var CIRCUMFERENCE = 2 * Math.PI * 96;
-
-  var timeLeft = WORK_TIME;
-  var totalTime = WORK_TIME;
-  var isRunning = false;
-  var isBreak = false;
-  var interval = null;
-  var sessionsCompleted = 0;
-  var focusPoints = 0;
-  var pauseCount = 0;
-  var breaksCompleted = 0;
-  var totalStudiedSecs = 0;
+  var timeLeft = WORK_TIME, totalTime = WORK_TIME;
+  var isRunning = false, isBreak = false, interval = null;
+  var sessionsCompleted = 0, focusPoints = 0, pauseCount = 0, breaksCompleted = 0, totalStudiedSecs = 0;
 
   // ── TO-DO ──
   var todos = [];
@@ -580,24 +523,24 @@
   function renderTodos() {
     var list = document.getElementById('todoList');
     var empty = document.getElementById('todoEmpty');
-    var progress = document.getElementById('todoProgress');
+    var progressRow = document.getElementById('todoProgressRow');
     var bar = document.getElementById('todoProgressBar');
     var label = document.getElementById('todoProgressLabel');
+    var badge = document.getElementById('todoCountBadge');
 
-    // Remove existing items (keep empty placeholder)
-    var existing = list.querySelectorAll('.todo-item');
-    existing.forEach(function(el) { el.remove(); });
+    list.querySelectorAll('.todo-item').forEach(function(el) { el.remove(); });
+
+    var doneCount = todos.filter(function(t) { return t.done; }).length;
+    badge.textContent = doneCount + '/' + todos.length;
 
     if (todos.length === 0) {
       empty.style.display = 'block';
-      progress.style.display = 'none';
+      progressRow.style.display = 'none';
       return;
     }
 
     empty.style.display = 'none';
-    progress.style.display = 'flex';
-
-    var doneCount = todos.filter(function(t) { return t.done; }).length;
+    progressRow.style.display = 'flex';
     var pct = Math.round((doneCount / todos.length) * 100);
     bar.style.width = pct + '%';
     label.textContent = doneCount + '/' + todos.length;
@@ -609,7 +552,6 @@
       var check = document.createElement('button');
       check.className = 'todo-check';
       check.textContent = t.done ? '✓' : '';
-      check.title = t.done ? 'Mark incomplete' : 'Mark complete';
       check.onclick = (function(id) { return function() { toggleTodo(id); }; })(t.id);
 
       var textEl = document.createElement('span');
@@ -619,7 +561,6 @@
       var del = document.createElement('button');
       del.className = 'todo-delete';
       del.textContent = '✕';
-      del.title = 'Delete task';
       del.onclick = (function(id) { return function() { deleteTodo(id); }; })(t.id);
 
       item.appendChild(check);
@@ -671,9 +612,7 @@
 
   function toggleTimer() {
     if (isRunning) {
-      clearInterval(interval);
-      isRunning = false;
-      pauseCount++;
+      clearInterval(interval); isRunning = false; pauseCount++;
       document.getElementById('startBtn').textContent = 'Resume';
       document.getElementById('timerCard').classList.remove('running');
     } else {
@@ -690,8 +629,7 @@
       if (!isBreak) totalStudiedSecs++;
       updateDisplay();
     } else {
-      clearInterval(interval);
-      isRunning = false;
+      clearInterval(interval); isRunning = false;
       document.getElementById('timerCard').classList.remove('running');
       onTimerEnd();
     }
@@ -705,29 +643,21 @@
       document.getElementById('focusPoints').textContent = focusPoints;
       updateDots();
       notifSmiski.src = SLEEP_IMG;
-      showNotif(
-        'Great work! +20 pts',
-        'You earned ' + focusPoints + ' focus points! Time for a 5-minute rest.',
-        [
-          { label: 'Start Break ✧', action: startBreak },
-          { label: 'Skip', action: function() { hideNotif(); startWork(); } }
-        ]
-      );
+      showNotif('Great work! +20 pts', 'You earned ' + focusPoints + ' focus points! Time for a 5-minute rest.', [
+        { label: 'Start Break ✧', action: startBreak },
+        { label: 'Skip', action: function() { hideNotif(); startWork(); } }
+      ]);
     } else {
       breaksCompleted++;
       notifSmiski.src = WORK_IMG;
-      showNotif(
-        "Break's over!",
-        "Get ready to lock in again. Let's get back to work!",
-        [{ label: 'Start Focus ✦', action: function() { hideNotif(); startWork(); } }]
-      );
+      showNotif("Break's over!", "Get ready to lock in again. Let's get back to work!", [
+        { label: 'Start Focus ✦', action: function() { hideNotif(); startWork(); } }
+      ]);
     }
   }
 
   function startWork() {
-    isBreak = false;
-    timeLeft = WORK_TIME;
-    totalTime = WORK_TIME;
+    isBreak = false; timeLeft = WORK_TIME; totalTime = WORK_TIME;
     document.getElementById('modeLabel').textContent = 'Stay focused ✦';
     document.getElementById('timerCard').className = 'card timer-card work-mode';
     smiskiImg.src = WORK_IMG;
@@ -737,9 +667,7 @@
 
   function startBreak() {
     hideNotif();
-    isBreak = true;
-    timeLeft = BREAK_TIME;
-    totalTime = BREAK_TIME;
+    isBreak = true; timeLeft = BREAK_TIME; totalTime = BREAK_TIME;
     document.getElementById('modeLabel').textContent = 'Rest time ✧';
     document.getElementById('timerCard').className = 'card timer-card break-mode';
     smiskiImg.src = SLEEP_IMG;
@@ -751,8 +679,7 @@
   }
 
   function resetTimer() {
-    clearInterval(interval);
-    isRunning = false;
+    clearInterval(interval); isRunning = false;
     hideNotif();
     document.getElementById('timerCard').classList.remove('running');
     startWork();
@@ -764,17 +691,13 @@
     sessionsCompleted = 0; focusPoints = 0; pauseCount = 0;
     breaksCompleted = 0; totalStudiedSecs = 0;
     document.getElementById('focusPoints').textContent = '0';
-    updateDots();
-    startWork();
+    updateDots(); startWork();
   }
 
-  function askEndSession() {
-    document.getElementById('confirmOverlay').classList.add('show');
-  }
+  function askEndSession() { document.getElementById('confirmOverlay').classList.add('show'); }
 
   function confirmEnd() {
-    clearInterval(interval);
-    isRunning = false;
+    clearInterval(interval); isRunning = false;
     hideNotif();
     document.getElementById('confirmOverlay').classList.remove('show');
     showStats();
@@ -785,21 +708,16 @@
     var hrs = Math.floor(totalMins / 60);
     var mins = totalMins % 60;
     var timeStr = hrs > 0 ? hrs + 'h ' + mins + 'm' : (totalMins > 0 ? totalMins + 'm' : '0m');
-
     document.getElementById('statsBadge').textContent = focusPoints + ' Focus Points ✦';
     document.getElementById('statHours').textContent = timeStr;
     document.getElementById('statSessions').textContent = sessionsCompleted;
     document.getElementById('statPauses').textContent = pauseCount;
     document.getElementById('statBreaks').textContent = breaksCompleted;
-
     if (sessionsCompleted > 0) {
-      var avgMins = Math.round(totalMins / sessionsCompleted);
-      document.getElementById('statAvgSession').textContent = avgMins + ' min';
+      document.getElementById('statAvgSession').textContent = Math.round(totalMins / sessionsCompleted) + ' min';
     } else {
       document.getElementById('statAvgSession').textContent = '—';
     }
-
-    // Todo stats
     if (todos.length > 0) {
       var doneCount = todos.filter(function(t) { return t.done; }).length;
       document.getElementById('statTodoDone').textContent = doneCount + '/' + todos.length;
@@ -807,14 +725,10 @@
     } else {
       document.getElementById('statTodoBox').style.display = 'none';
     }
-
-    var sub = sessionsCompleted === 0
-      ? "You ended early — that's okay, every bit counts!"
-      : sessionsCompleted === 1
-      ? 'You completed 1 full focus session. Keep building the habit!'
+    var sub = sessionsCompleted === 0 ? "You ended early — that's okay, every bit counts!"
+      : sessionsCompleted === 1 ? 'You completed 1 full focus session. Keep building the habit!'
       : 'You crushed it with ' + sessionsCompleted + ' sessions today!';
     document.getElementById('statsSubtitle').textContent = sub;
-
     showPage('statsPage');
   }
 
@@ -833,9 +747,7 @@
     document.getElementById('notifOverlay').classList.add('show');
   }
 
-  function hideNotif() {
-    document.getElementById('notifOverlay').classList.remove('show');
-  }
+  function hideNotif() { document.getElementById('notifOverlay').classList.remove('show'); }
 
   function playChime() {
     try {
