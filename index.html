@@ -22,10 +22,11 @@
     background: var(--cream);
     min-height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    overflow: hidden;
+    overflow-x: hidden;
     position: relative;
+    padding: 24px 16px;
   }
   body::before {
     content: '';
@@ -54,7 +55,7 @@
   }
 
   /* ── PAGES ── */
-  .page { display: none; position: relative; z-index: 2; width: 100%; align-items: center; justify-content: center; }
+  .page { display: none; position: relative; z-index: 2; width: 100%; align-items: flex-start; justify-content: center; }
   .page.active { display: flex; }
 
   /* ── SHARED CARD ── */
@@ -104,8 +105,14 @@
   .mode-option-badge { font-family: 'Fredoka One', sans-serif; font-size: 13px; color: var(--dark-green); background: var(--cream); border-radius: 50px; padding: 3px 10px; border: 1.5px solid var(--mid-green); white-space: nowrap; }
   .mode-option.selected .mode-option-badge { background: var(--light-green); border-color: var(--dark-green); }
 
+  /* ── TIMER + TODO LAYOUT ── */
+  #timerPage {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
   /* ── TIMER PAGE ── */
-  .timer-card { transition: all 0.4s ease; }
+  .timer-card { transition: all 0.4s ease; flex-shrink: 0; }
   .mode-label { font-family: 'Fredoka One', sans-serif; font-size: 20px; color: var(--darkest-green); margin-bottom: 14px; letter-spacing: 0.5px; transition: all 0.4s ease; }
   .progress-ring-wrap { position: relative; width: 210px; height: 210px; margin: 0 auto 6px; }
   .progress-ring-wrap svg { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
@@ -130,6 +137,182 @@
   .break-mode .mode-label { color: var(--green); }
   .running::after { content: ''; position: absolute; inset: -8px; border-radius: 28px; border: 2px solid var(--mid-green); animation: pulse 2s ease-in-out infinite; pointer-events: none; }
   @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+
+  /* ── TO-DO CARD ── */
+  .todo-card {
+    background: white;
+    border: 3px solid var(--dark-green);
+    border-radius: 24px;
+    padding: 36px 28px 28px;
+    width: 300px;
+    box-shadow: 6px 6px 0px var(--darkest-green), 0 20px 60px var(--shadow);
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+  }
+  .todo-title {
+    font-family: 'Fredoka One', sans-serif;
+    font-size: 18px;
+    color: var(--darkest-green);
+    margin-bottom: 14px;
+    text-align: center;
+    letter-spacing: 0.4px;
+  }
+  .todo-input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .todo-input {
+    flex: 1;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    background: var(--light-green);
+    border: 2px solid var(--mid-green);
+    border-radius: 50px;
+    padding: 8px 14px;
+    color: var(--darkest-green);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .todo-input::placeholder { color: var(--green); }
+  .todo-input:focus { border-color: var(--dark-green); background: white; }
+  .todo-add-btn {
+    font-family: 'Fredoka One', sans-serif;
+    font-size: 20px;
+    background: var(--dark-green);
+    color: var(--cream);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 0 var(--darkest-green);
+    transition: all 0.15s;
+    flex-shrink: 0;
+    padding-bottom: 2px;
+  }
+  .todo-add-btn:hover { background: var(--darkest-green); transform: translateY(2px); box-shadow: 0 1px 0 var(--darkest-green); }
+  .todo-add-btn:active { transform: scale(0.92); }
+  .todo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 2px;
+  }
+  .todo-list::-webkit-scrollbar { width: 4px; }
+  .todo-list::-webkit-scrollbar-track { background: var(--light-green); border-radius: 4px; }
+  .todo-list::-webkit-scrollbar-thumb { background: var(--mid-green); border-radius: 4px; }
+  .todo-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--light-green);
+    border: 2px solid var(--mid-green);
+    border-radius: 14px;
+    padding: 10px 12px;
+    transition: all 0.2s ease;
+    animation: slideIn 0.25s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .todo-item.done {
+    background: white;
+    border-color: var(--light-green);
+    opacity: 0.65;
+  }
+  .todo-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2.5px solid var(--dark-green);
+    background: white;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    font-size: 11px;
+    color: transparent;
+  }
+  .todo-item.done .todo-check {
+    background: var(--dark-green);
+    color: var(--cream);
+  }
+  .todo-check:hover { background: var(--mid-green); }
+  .todo-text {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--darkest-green);
+    line-height: 1.4;
+    word-break: break-word;
+    transition: all 0.2s;
+  }
+  .todo-item.done .todo-text {
+    text-decoration: line-through;
+    color: var(--green);
+  }
+  .todo-delete {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+    color: #c97a7a;
+    padding: 2px 4px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .todo-item:hover .todo-delete { opacity: 1; }
+  .todo-delete:hover { background: #f8e8e8; }
+  .todo-empty {
+    text-align: center;
+    font-size: 12px;
+    color: var(--green);
+    font-weight: 700;
+    padding: 24px 0 10px;
+    line-height: 1.6;
+  }
+  .todo-progress {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1.5px solid var(--light-green);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .todo-progress-bar-wrap {
+    flex: 1;
+    height: 8px;
+    background: var(--light-green);
+    border-radius: 50px;
+    overflow: hidden;
+    border: 1.5px solid var(--mid-green);
+  }
+  .todo-progress-bar {
+    height: 100%;
+    background: var(--dark-green);
+    border-radius: 50px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .todo-progress-label {
+    font-family: 'Fredoka One', sans-serif;
+    font-size: 13px;
+    color: var(--darkest-green);
+    white-space: nowrap;
+  }
 
   /* ── STATS PAGE ── */
   #statsPage .card { width: 360px; }
@@ -160,6 +343,13 @@
   .confirm-title { font-family: 'Fredoka One', sans-serif; font-size: 20px; color: var(--darkest-green); margin-bottom: 8px; }
   .confirm-body { font-size: 13px; color: var(--dark-green); margin-bottom: 20px; line-height: 1.5; }
   .confirm-btns { display: flex; gap: 10px; justify-content: center; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    #timerPage { flex-direction: column; align-items: center; }
+    .todo-card { width: 340px; }
+    body { padding: 16px 12px; }
+  }
 </style>
 </head>
 <body>
@@ -171,7 +361,7 @@
 <div class="sparkle">✦</div>
 <div class="sparkle">✧</div>
 
-<!-- Notification overlay (break/focus transitions) -->
+<!-- Notification overlay -->
 <div class="notif-overlay" id="notifOverlay">
   <div class="notif-card">
     <img class="notif-smiski" id="notifSmiski" alt="Smiski" />
@@ -232,6 +422,8 @@
 
 <!-- ═══ TIMER PAGE ═══ -->
 <div class="page" id="timerPage">
+
+  <!-- Timer card -->
   <div class="card timer-card work-mode" id="timerCard">
     <div class="window-bar">
       <span class="window-title">✦ Study Timer ✦</span>
@@ -264,6 +456,29 @@
       <button class="btn btn-danger" onclick="askEndSession()">End Study Session</button>
     </div>
   </div>
+
+  <!-- To-do card -->
+  <div class="todo-card">
+    <div class="window-bar" style="margin:-36px -28px 20px -28px">
+      <span class="window-title">✦ To-Do List ✦</span>
+      <div class="window-btns"><span></span><span></span></div>
+    </div>
+    <div class="todo-input-row">
+      <input class="todo-input" id="todoInput" type="text" placeholder="Add a task..." maxlength="80"
+        onkeydown="if(event.key==='Enter') addTodo()" />
+      <button class="todo-add-btn" onclick="addTodo()">+</button>
+    </div>
+    <div class="todo-list" id="todoList">
+      <div class="todo-empty" id="todoEmpty">No tasks yet! ✦<br>Add something to work on.</div>
+    </div>
+    <div class="todo-progress" id="todoProgress" style="display:none">
+      <div class="todo-progress-bar-wrap">
+        <div class="todo-progress-bar" id="todoProgressBar"></div>
+      </div>
+      <div class="todo-progress-label" id="todoProgressLabel">0/0</div>
+    </div>
+  </div>
+
 </div>
 
 <!-- ═══ STATS PAGE ═══ -->
@@ -297,6 +512,10 @@
       <div class="stat-box wide">
         <div class="stat-val" id="statAvgSession">—</div>
         <div class="stat-lbl">Avg Focus Session</div>
+      </div>
+      <div class="stat-box wide" id="statTodoBox" style="display:none">
+        <div class="stat-val" id="statTodoDone">0/0</div>
+        <div class="stat-lbl">Tasks Completed</div>
       </div>
     </div>
     <button class="btn btn-primary" onclick="startNewSession()" style="width:100%">New Session ✦</button>
@@ -334,6 +553,83 @@
   var breaksCompleted = 0;
   var totalStudiedSecs = 0;
 
+  // ── TO-DO ──
+  var todos = [];
+  var todoIdCounter = 0;
+
+  function addTodo() {
+    var input = document.getElementById('todoInput');
+    var text = input.value.trim();
+    if (!text) return;
+    todos.push({ id: todoIdCounter++, text: text, done: false });
+    input.value = '';
+    renderTodos();
+    input.focus();
+  }
+
+  function toggleTodo(id) {
+    var t = todos.find(function(t) { return t.id === id; });
+    if (t) { t.done = !t.done; renderTodos(); }
+  }
+
+  function deleteTodo(id) {
+    todos = todos.filter(function(t) { return t.id !== id; });
+    renderTodos();
+  }
+
+  function renderTodos() {
+    var list = document.getElementById('todoList');
+    var empty = document.getElementById('todoEmpty');
+    var progress = document.getElementById('todoProgress');
+    var bar = document.getElementById('todoProgressBar');
+    var label = document.getElementById('todoProgressLabel');
+
+    // Remove existing items (keep empty placeholder)
+    var existing = list.querySelectorAll('.todo-item');
+    existing.forEach(function(el) { el.remove(); });
+
+    if (todos.length === 0) {
+      empty.style.display = 'block';
+      progress.style.display = 'none';
+      return;
+    }
+
+    empty.style.display = 'none';
+    progress.style.display = 'flex';
+
+    var doneCount = todos.filter(function(t) { return t.done; }).length;
+    var pct = Math.round((doneCount / todos.length) * 100);
+    bar.style.width = pct + '%';
+    label.textContent = doneCount + '/' + todos.length;
+
+    todos.forEach(function(t) {
+      var item = document.createElement('div');
+      item.className = 'todo-item' + (t.done ? ' done' : '');
+
+      var check = document.createElement('button');
+      check.className = 'todo-check';
+      check.textContent = t.done ? '✓' : '';
+      check.title = t.done ? 'Mark incomplete' : 'Mark complete';
+      check.onclick = (function(id) { return function() { toggleTodo(id); }; })(t.id);
+
+      var textEl = document.createElement('span');
+      textEl.className = 'todo-text';
+      textEl.textContent = t.text;
+
+      var del = document.createElement('button');
+      del.className = 'todo-delete';
+      del.textContent = '✕';
+      del.title = 'Delete task';
+      del.onclick = (function(id) { return function() { deleteTodo(id); }; })(t.id);
+
+      item.appendChild(check);
+      item.appendChild(textEl);
+      item.appendChild(del);
+      list.appendChild(item);
+    });
+  }
+
+  // ── TIMER ──
   function selectMode(idx) {
     selectedMode = idx;
     document.querySelectorAll('.mode-option').forEach(function(el, i) {
@@ -355,7 +651,7 @@
   }
 
   function startNewSession() {
-    selectMode(selectedMode); // keep selection visible but re-highlight
+    selectMode(selectedMode);
     showPage('startPage');
   }
 
@@ -501,6 +797,15 @@
       document.getElementById('statAvgSession').textContent = avgMins + ' min';
     } else {
       document.getElementById('statAvgSession').textContent = '—';
+    }
+
+    // Todo stats
+    if (todos.length > 0) {
+      var doneCount = todos.filter(function(t) { return t.done; }).length;
+      document.getElementById('statTodoDone').textContent = doneCount + '/' + todos.length;
+      document.getElementById('statTodoBox').style.display = 'block';
+    } else {
+      document.getElementById('statTodoBox').style.display = 'none';
     }
 
     var sub = sessionsCompleted === 0
